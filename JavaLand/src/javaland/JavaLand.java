@@ -5,6 +5,6 @@ public class JavaLand
 {
     public static void main(String[] args) 
     {
-		System.out.println("Stor GRIM hestemis");
+		System.out.println("Stor HIHI hestemis");
     }
 }
