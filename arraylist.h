@@ -45,7 +45,7 @@ elements
     }
 
 /*
-* Inserts the element at placement " idx " in array andmoves the remaining
+* Inserts the element at placement " idx " in array and moves the remaining
 * items by one place , restoring the old element at " idx".
 * check whether it is needed to extend the storage .
 * move all elements from _size to idx ( reverse ) one element to the right in the array
@@ -124,3 +124,5 @@ private:
 };
 
 # endif // ARRAYLIST_H
+
+
