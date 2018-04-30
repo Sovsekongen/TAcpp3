@@ -67,7 +67,7 @@ int main ()
     {
         std::cout << subArray[i] << ", ";
     }
-    std: cout << "\b\b " << std::endl << std::endl;
+    std:: cout << "\b\b " << std::endl << std::endl;
 
     // The original array has
     std::cout << "Original array" << std::endl;
