@@ -281,11 +281,13 @@ ArrayList<T> ArrayList<T>::subArrayList(int fromIdx, int toIdx) const
 template<class T>
 T* ArrayList<T>::toArray()
 {
-    resArray = new T[_size];
-    for(int i = 0;i < _size;++i)
-    {
+    T = new T[_size];
 
+    for(int i = 0; i < _size; i++)
+    {
+        T[i] = _elems[i];
     }
+    return *T;
 }
 
 template<class T>
