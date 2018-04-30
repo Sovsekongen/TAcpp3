@@ -240,8 +240,22 @@ void ArrayList<T>::remove(int idx)
     {
         tempArray._elems[i] = _elems[i];
     }
+    _reserved = _size;
 }
 
+// Returns a new ArrayList with elements from " fromIdx " index to " toIdx "
+template<class T>
+ArrayList<T> ArrayList<T>::subArrayList(int fromIdx, int toIdx) const
+{
+    ArrayList<T> resArray(fromIdx-toIdx);
+    int j = 0;
+    for (int i = fromIdx;i < toIdx;++i)
+    {
+        resArray._elems[j] = _elems[i];
+        j++;
+    }
+    return resArray;
+}
 
 
 
