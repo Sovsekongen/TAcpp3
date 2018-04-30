@@ -51,16 +51,16 @@ elements
 * move all elements from _size to idx ( reverse ) one element to the right in the array
 * set _elems [ idx ] equal to the element to be inserted
 */
-    void add(int idx, constT& element);
+    void add(int idx, const T& element);
 /*
 * Get a const reference to the element at idx
 */
-    const T& operator [](int idx) const ;
+    T &operator [](int idx) const;
 
 /*
 * Get a reference to the element at idx
 */
-    T& operator [](int idx);
+    T &operator [](int idx);
 
 /*
 * Removes the element at placement " idx " by moving all the remaining elements
@@ -122,5 +122,135 @@ private:
     int _size ; // The number of elements stored
     T* _elems ; // Array for storing the elements
 };
+
+// Copy constructor
+template<class T>
+ArrayList<T>::ArrayList(const ArrayList<T>& c)
+{
+    _size = c._size;
+
+    _elems = new T[_size];
+
+    for (int i = 0; i < _size; ++i)
+    {
+        _elems[i] = c._elems[i];
+    }
+}
+
+// Move constructor
+template<class T>
+ArrayList<T>::ArrayList(ArrayList<T> &&c)
+{
+    _size = c._size;
+    _elems = c._elems;
+    c._size = 0;
+    c._elems = nullptr;
+}
+
+// Constructor with initialization of " initialized " elements
+template<class T>
+ArrayList<T>::ArrayList(int initialized)
+{
+    _size = initialized;
+    _elems = new T[_size];
+}
+
+// Copy assignment operator
+template<class T>
+ArrayList<T>& ArrayList<T>::operator =(const ArrayList<T>& a)
+{
+    delete [] _elems;
+
+    _size = a._size;
+    _elems = new T[_size];
+
+    for (int i = 0; i < _size; ++i)
+    {
+        _elems[i] = a._elems[i];
+    }
+
+    return *this;
+}
+
+// Move assignment operator
+template<class T>
+ArrayList<T>& ArrayList<T>::operator =(ArrayList<T>&& a)
+{
+    T* tempElems = _elems;
+    int tempSize = _size;
+
+    _elems = a._elems;
+    _size = a._size;
+
+    a._size = tempSize;
+    a._elems = tempElems;
+
+    return *this;
+}
+
+// Get a const reference to the element at idx
+template<class T>
+T& ArrayList<T>::operator [](int idx) const
+{
+    return _elems[idx];
+}
+
+// Get a reference to the element at idx
+template<class T>
+T& ArrayList<T>::operator [](int idx)
+{
+    return _elems[idx];
+}
+
+// Returns the number of elements stored
+template<class T>
+int ArrayList<T>::size() const
+{
+    return _size;
+}
+
+// Returns the number of items currently reserved in memory
+template<class T>
+int ArrayList<T>::reserved() const
+{
+    return _reserved;
+}
+
+// Returns true if number of elements in array is zero
+template<class T>
+bool ArrayList<T>::isEmpty() const
+{
+    if(_elems = 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+// Removes the element at placement " idx " by moving all the remaining elements by one place to the left in the array
+template<class T>
+void ArrayList<T>::remove(int idx)
+{
+    ArrayList<T> tempArray(_size-1);
+
+    for(int i = 0;i <= _size;++i)
+    {
+        tempArray._elems[i] = _elems[i];
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
 
 # endif // ARRAYLIST_H
