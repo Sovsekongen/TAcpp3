@@ -234,18 +234,21 @@ bool ArrayList<T>::isEmpty() const
 * Sorts the array using insertion sort (or another algorithm )
 */
 template<class T>
-void ArrayList<T>::sort(){
+void ArrayList<T>::sort()
+{
 
-       for(int i = 1; i < _size; ++i)
+    for(int i = 1; i < _size; ++i)
+    {
+       int index = _elems[i];
+       int j = i;
+       while (j > 0 && _elems[j-1] > index)
        {
-          int index = _elems[i]; int j = i;
-          while (j > 0 && _elems[j-1] > index)
-          {
-               _elems[j] = _elems[j-1];
-               j--;
-          }
-          _elems[j] = index;
-    } }
+           _elems[j] = _elems[j-1];
+           j--;
+       }
+       _elems[j] = index;
+    }
+}
 
 // Removes the element at placement " idx " by moving all the remaining elements by one place to the left in the array
 template<class T>
@@ -285,6 +288,17 @@ T* ArrayList<T>::toArray()
     }
 }
 
+template<class T>
+void ArrayList<T>::extendStorage()
+{
+    ArrayList<T> tempArray(_reserved*2);
+    for(int i = 0;i < _size;++i)
+    {
+        tempArray._elems[i]=_elems[i];
+    }
+    delete [] _elems;
+    _elems = tempArray._elems;
+}
 
 
 
