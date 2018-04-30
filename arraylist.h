@@ -35,14 +35,7 @@ elements
 /*
 * Add element to dynamic array
 */
-    void add (const T& element)
-    {
-        if (_size == _reserved)
-            extendStorage() ;
-
-        _elems [_size] = element;
-        ++ _size ;
-    }
+    void add (const T& element);
 
 /*
 * Inserts the element at placement " idx " in array and moves the remaining
@@ -123,6 +116,13 @@ private:
     T* _elems ; // Array for storing the elements
 };
 
+// No-arg constructor
+template<class T>
+ArrayList<T>::ArrayList()
+{
+    _size = 1;
+    _reserved = 1;
+}
 // Copy constructor
 template<class T>
 ArrayList<T>::ArrayList(const ArrayList<T>& c)
@@ -153,6 +153,13 @@ ArrayList<T>::ArrayList(int initialized)
 {
     _size = initialized;
     _elems = new T[_size];
+}
+
+// Deconstructor
+template<class T>
+ArrayList<T>::~ArrayList()
+{
+    delete [] _elems;
 }
 
 // Copy assignment operator
@@ -230,9 +237,23 @@ bool ArrayList<T>::isEmpty() const
     }
 }
 
-/*
-* Sorts the array using insertion sort (or another algorithm )
-*/
+// Trims the storage array to the exact number of elements stored.
+template<class T>
+void ArrayList<T>::trimToSize()
+{
+    ArrayList<T> tempArray(_size);
+    for (int i = 0; i < _size; ++i)
+    {
+        tempArray._elems[i] = _elems[i];
+    }
+    delete [] _elems;
+    *this = tempArray;
+
+}
+
+
+// Sorts the array using insertion sort (or another algorithm )
+
 template<class T>
 void ArrayList<T>::sort()
 {
@@ -258,9 +279,16 @@ void ArrayList<T>::remove(int idx)
 
     for(int i = 0;i <= _size;++i)
     {
-        tempArray._elems[i] = _elems[i];
+        if(i < idx)
+        {
+            tempArray._elems[i] = _elems[i];
+        }
+        else if(i >= idx)
+        {
+            tempArray._elems[i] = _elems[i+1];
+        }
     }
-    _reserved = _size;
+    *this = tempArray;
 }
 
 // Returns a new ArrayList with elements from " fromIdx " index to " toIdx "
@@ -281,15 +309,16 @@ ArrayList<T> ArrayList<T>::subArrayList(int fromIdx, int toIdx) const
 template<class T>
 T* ArrayList<T>::toArray()
 {
-    T = new T[_size];
+    T *res = new T[_size];
 
     for(int i = 0; i < _size; i++)
     {
-        T[i] = _elems[i];
+        res[i] = _elems[i];
     }
-    return *T;
+    return res;
 }
 
+// Extends reserved elements
 template<class T>
 void ArrayList<T>::extendStorage()
 {
@@ -302,7 +331,50 @@ void ArrayList<T>::extendStorage()
     _elems = tempArray._elems;
 }
 
+/*
+* Inserts the element at placement " idx " in array and moves the remaining
+* items by one place , restoring the old element at " idx".
+* check whether it is needed to extend the storage .
+* move all elements from _size to idx ( reverse ) one element to the right in the array
+* set _elems [ idx ] equal to the element to be inserted
+*/
+template<class T>
+void ArrayList<T>::add(int idx, const T& element)
+{
+    if (_size <= _reserved)
+    {
+        extendStorage();
+    }
+    ArrayList<T> tempArray(_size+1);
+    for(int i = 0; i < idx-1;++i)
+    {
+        if(i < idx)
+        {
+            tempArray._elems[i] = _elems[i];
+        }
+        else if(i == idx)
+        {
+            tempArray._elems[i] = element;
+        }
+        else
+        {
+            tempArray._elems[i] = _elems[i-1];
+        }
 
+    }
+    *this = tempArray;
+}
+
+// Add element to dynamic array
+template<class T>
+void ArrayList<T>::add(const T& element)
+{
+    if (_size == _reserved)
+        extendStorage();
+
+    _elems [_size] = element;
+    ++_size;
+}
 
 
 
