@@ -122,6 +122,7 @@ ArrayList<T>::ArrayList()
 {
     _size = 1;
     _reserved = 1;
+
 }
 // Copy constructor
 template<class T>
@@ -322,7 +323,7 @@ T* ArrayList<T>::toArray()
 template<class T>
 void ArrayList<T>::extendStorage()
 {
-    ArrayList<T> tempArray(_reserved*2);
+    ArrayList<T>  tempArray(_reserved*2);
     for(int i = 0;i < _size;++i)
     {
         tempArray._elems[i]=_elems[i];
