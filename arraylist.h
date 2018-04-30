@@ -1,5 +1,6 @@
 # ifndef ARRAYLIST_H
 # define ARRAYLIST_H
+#include <iostream>
 
 template <typename T>
 class ArrayList
@@ -120,16 +121,18 @@ private:
 template<class T>
 ArrayList<T>::ArrayList()
 {
-    _size = 1;
-    _reserved = 1;
+    _size = 0;
+    _reserved = 0;
+    _elems = new T[_reserved];
+
 }
 // Copy constructor
 template<class T>
 ArrayList<T>::ArrayList(const ArrayList<T>& c)
 {
     _size = c._size;
-
-    _elems = new T[_size];
+    _reserved = c._reserved;
+    _elems = new T[_reserved];
 
     for (int i = 0; i < _size; ++i)
     {
@@ -143,16 +146,19 @@ ArrayList<T>::ArrayList(ArrayList<T> &&c)
 {
     _size = c._size;
     _elems = c._elems;
+    _reserved = c._reserved;
     c._size = 0;
     c._elems = nullptr;
+    c._reserved = 0;
 }
 
 // Constructor with initialization of " initialized " elements
 template<class T>
 ArrayList<T>::ArrayList(int initialized)
 {
-    _size = initialized;
-    _elems = new T[_size];
+    _reserved = initialized;
+    _size = 0;
+    _elems = new T[_reserved];
 }
 
 // Deconstructor
@@ -169,7 +175,8 @@ ArrayList<T>& ArrayList<T>::operator =(const ArrayList<T>& a)
     delete [] _elems;
 
     _size = a._size;
-    _elems = new T[_size];
+    _elems = new T[_reserved];
+    _reserved = a._reserved;
 
     for (int i = 0; i < _size; ++i)
     {
@@ -185,12 +192,15 @@ ArrayList<T>& ArrayList<T>::operator =(ArrayList<T>&& a)
 {
     T* tempElems = _elems;
     int tempSize = _size;
+    int tempRes = _reserved;
 
     _elems = a._elems;
     _size = a._size;
+    _reserved = a._reserved;
 
     a._size = tempSize;
     a._elems = tempElems;
+    a._reserved = tempRes;
 
     return *this;
 }
@@ -245,8 +255,10 @@ void ArrayList<T>::trimToSize()
     for (int i = 0; i < _size; ++i)
     {
         tempArray._elems[i] = _elems[i];
+        tempArray._size++;
     }
     delete [] _elems;
+    tempArray._reserved = tempArray._size;
     *this = tempArray;
 
 }
@@ -275,7 +287,7 @@ void ArrayList<T>::sort()
 template<class T>
 void ArrayList<T>::remove(int idx)
 {
-    ArrayList<T> tempArray(_size-1);
+    ArrayList<T> tempArray(_reserved-1);
 
     for(int i = 0;i <= _size;++i)
     {
@@ -287,7 +299,9 @@ void ArrayList<T>::remove(int idx)
         {
             tempArray._elems[i] = _elems[i+1];
         }
+        tempArray._size++;
     }
+    tempArray._size--;
     *this = tempArray;
 }
 
@@ -295,12 +309,13 @@ void ArrayList<T>::remove(int idx)
 template<class T>
 ArrayList<T> ArrayList<T>::subArrayList(int fromIdx, int toIdx) const
 {
-    ArrayList<T> resArray(fromIdx-toIdx);
+    ArrayList<T> resArray(toIdx-fromIdx);
     int j = 0;
     for (int i = fromIdx;i < toIdx;++i)
     {
         resArray._elems[j] = _elems[i];
         j++;
+        resArray._size++;
     }
     return resArray;
 }
@@ -318,10 +333,26 @@ T* ArrayList<T>::toArray()
     return res;
 }
 
+/*
+* extendStorage ():
+* create new array with size 2* _reserved
+* copy old data to the new array
+* delete old array
+* update pointer _elems to point to the new array
+* ( Since this method is private , the method will only be used internally ,
+* but the functionality is needed ).
+*/
 // Extends reserved elements
 template<class T>
 void ArrayList<T>::extendStorage()
 {
+
+    if(_reserved == 0)
+    {
+        _reserved = 1;
+    }
+    std::cout << _size << " size " << std::endl;
+    std::cout << _reserved << std::endl;
     ArrayList<T> tempArray(_reserved*2);
     for(int i = 0;i < _size;++i)
     {
@@ -329,6 +360,21 @@ void ArrayList<T>::extendStorage()
     }
     delete [] _elems;
     _elems = tempArray._elems;
+    _reserved = tempArray._reserved;
+}
+
+// Add element to dynamic array
+template<class T>
+void ArrayList<T>::add(const T& element)
+{
+    if (_size == _reserved)
+    {
+        extendStorage();
+    }
+    _elems[_size] = element;
+    ++_size;
+
+
 }
 
 /*
@@ -341,12 +387,12 @@ void ArrayList<T>::extendStorage()
 template<class T>
 void ArrayList<T>::add(int idx, const T& element)
 {
-    if (_size <= _reserved)
+    if (_size == _reserved)
     {
         extendStorage();
     }
     ArrayList<T> tempArray(_size+1);
-    for(int i = 0; i < idx-1;++i)
+    for(int i = 0; i < _size;++i)
     {
         if(i < idx)
         {
@@ -360,21 +406,13 @@ void ArrayList<T>::add(int idx, const T& element)
         {
             tempArray._elems[i] = _elems[i-1];
         }
+        tempArray._size++;
 
     }
     *this = tempArray;
 }
 
-// Add element to dynamic array
-template<class T>
-void ArrayList<T>::add(const T& element)
-{
-    if (_size == _reserved)
-        extendStorage();
 
-    _elems [_size] = element;
-    ++_size;
-}
 
 
 
