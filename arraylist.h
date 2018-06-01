@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 # ifndef ARRAYLIST_H
 # define ARRAYLIST_H
 #include <iostream>
@@ -421,3 +423,4 @@ void ArrayList<T>::add(int idx, const T& element)
 # endif // ARRAYLIST_H
 
 
+>>>>>>> ad4ee33f89e742c9af54f4b52c59b7ad8bcc8c4d
