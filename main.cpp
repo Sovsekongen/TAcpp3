@@ -8,6 +8,7 @@ int main ()
     for (int i = 0; i < 33; ++i)
     {
         array.add(i *1.1);
+
     }
 
 //    array.add (4, -5);

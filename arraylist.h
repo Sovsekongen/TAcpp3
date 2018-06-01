@@ -121,14 +121,13 @@ private:
 template<class T>
 ArrayList<T>::ArrayList()
 {
-<<<<<<< HEAD
+
     _size = 1;
     _reserved = 1;
-=======
+
     _size = 0;
     _reserved = 0;
     _elems = new T[_reserved];
->>>>>>> 5df8f9b5c58ceb5128728b0fe5cacf96c8fd879c
 
 }
 // Copy constructor
@@ -351,18 +350,8 @@ T* ArrayList<T>::toArray()
 template<class T>
 void ArrayList<T>::extendStorage()
 {
-<<<<<<< HEAD
-    ArrayList<T>  tempArray(_reserved*2);
-=======
-
-    if(_reserved == 0)
-    {
-        _reserved = 1;
-    }
-    std::cout << _size << " size " << std::endl;
-    std::cout << _reserved << std::endl;
     ArrayList<T> tempArray(_reserved*2);
->>>>>>> 5df8f9b5c58ceb5128728b0fe5cacf96c8fd879c
+
     for(int i = 0;i < _size;++i)
     {
         tempArray._elems[i]=_elems[i];
